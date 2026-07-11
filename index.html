@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Pet - Pegue o Osso!</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+<div id="game">
+
+    <header>
+
+        <h1>🐶 PEGUE O OSSO! 🦴</h1>
+
+        <div class="hud">
+
+            <div class="box">
+                ⭐ Pontos:
+                <span id="score">0</span>
+            </div>
+
+            <div class="box">
+                ⏱️
+                <span id="timer">30</span>s
+            </div>
+
+            <div class="box">
+                🏆
+                <span id="record">0</span>
+            </div>
+
+        </div>
+
+    </header>
+
+    <main id="gameArea">
+
+        <div id="dog">
+            🐶
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Tela Inicial -->
+
+<div id="startScreen" class="screen">
+
+    <h2>🐾 Bem-vindo!</h2>
+
+    <p>
+
+        Clique nos ossos antes que eles caiam.
+
+        Evite as bombas!
+
+    </p>
+
+    <button id="startButton">
+        ▶️ Jogar
+    </button>
+
+</div>
+
+<!-- Tela Final -->
+
+<div id="gameOver" class="screen hidden">
+
+    <h2>Fim de jogo!</h2>
+
+    <h3>
+
+        Sua pontuação:
+
+        <span id="finalScore">0</span>
+
+    </h3>
+
+    <p id="message"></p>
+
+    <button id="restartButton">
+        🔄 Jogar Novamente
+    </button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
