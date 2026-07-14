@@ -1,289 +1,225 @@
-:root{
-    --laranja:#ff7a00;
-    --azul:#0057b8;
-    --azulEscuro:#003d82;
-    --branco:#ffffff;
-    --cinza:#f5f5f5;
-    --verde:#37b24d;
-    --vermelho:#e03131;
+/* ==========================================
+   CONFIGURAÇÕES GERAIS E CENTRALIZAÇÃO
+   ========================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    user-select:none;
-    font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f0f8ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none; /* Impede que o jogador selecione textos sem querer */
+    -webkit-user-select: none;
 }
 
-body{
-    background:#ececec;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+/* ==========================================
+   CONTAINER PRINCIPAL DO JOGO
+   ========================================== */
+#game {
+    position: relative; /* Mantém as telas internas alinhadas a ele */
+    width: 100%;
+    max-width: 400px;
+    height: 600px;
+    background: #e2f0d9;
+    border: 4px solid #8ca47d;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Garante que nada saia das bordas arredondadas */
 }
 
-#game{
-    width:430px;
-    max-width:100%;
-    height:850px;
-    max-height:100vh;
-    background:linear-gradient(#fff5eb,#ffffff);
-    border-radius:18px;
-    overflow:hidden;
-    position:relative;
-    box-shadow:0 15px 35px rgba(0,0,0,.2);
+/* Cabeçalho e Placar */
+header {
+    background-color: #8ca47d;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    z-index: 5; /* Fica abaixo das telas de Menu/Game Over, mas acima do jogo */
 }
 
-header{
-    background:white;
-    padding:18px;
-    border-bottom:4px solid var(--laranja);
+h1 {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
 }
 
-header h1{
-    text-align:center;
-    color:var(--laranja);
-    font-size:30px;
-    font-weight:900;
-    margin-bottom:15px;
+.hud {
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
 }
 
-.hud{
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
+.box {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-.box{
-    flex:1;
-    background:var(--cinza);
-    border-radius:30px;
-    padding:10px;
-    text-align:center;
-    font-weight:bold;
-    border:2px solid #ddd;
-    color:var(--azulEscuro);
+/* ==========================================
+   ÁREA DO JOGO (ONDE OS ITENS CAEM)
+   ========================================== */
+#gameArea {
+    flex: 1;
+    position: relative; /* CRUCIAL: Permite que os itens usem position absolute em relação a ele */
+    background: #f4f9f1;
+    overflow: hidden; /* Esconde os itens quando eles passarem do chão */
+    width: 100%;
 }
 
-#gameArea{
-    position:relative;
-    width:100%;
-    height:calc(100% - 120px);
-    overflow:hidden;
+/* Cachorrinho */
+#dog {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 50px;
+    transition: transform 0.1s ease;
+    pointer-events: none; /* Impede o cachorro de atrapalhar os cliques nos itens */
+    z-index: 2;
 }
 
-#dog{
-    position:absolute;
-    bottom:10px;
-    left:50%;
-    transform:translateX(-50%);
-    font-size:85px;
-    z-index:5;
-    transition:.15s;
+/* Animação de Pulo */
+#dog.jump {
+    transform: translateX(-50%) translateY(-35px) scale(1.15);
 }
 
-#dog.jump{
-    transform:translateX(-50%) scale(1.15);
+/* ==========================================
+   ITENS CADENTES (OSSOS, BOMBAS, ETC.)
+   ========================================== */
+.item {
+    position: absolute;
+    top: -60px; /* Começa acima do topo visível */
+    font-size: 38px;
+    cursor: pointer;
+    z-index: 3;
+    user-select: none;
+    -webkit-user-select: none;
+    animation: fall linear forwards; /* Executa a animação de queda */
 }
 
-.item{
-    position:absolute;
-    font-size:42px;
-    cursor:pointer;
-    animation-name:fall;
-    animation-timing-function:linear;
-    animation-fill-mode:forwards;
-}
-
-.item:hover{
-    transform:scale(1.15);
-}
-
-.good{
-    filter:drop-shadow(0 0 10px rgba(0,255,0,.35));
-}
-
-.bad{
-    filter:drop-shadow(0 0 10px rgba(255,0,0,.35));
-}
-
-@keyframes fall{
-
-    from{
-        top:-80px;
+/* Animação de Queda */
+@keyframes fall {
+    0% {
+        top: -60px;
     }
-
-    to{
-        top:900px;
+    100% {
+        top: 105%; /* Vai até passar um pouco do limite inferior */
     }
-
 }
 
-.screen{
-    position:absolute;
-    inset:0;
-    background:rgba(255,255,255,.96);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:35px;
-    z-index:999;
+/* Popups de Pontuação (+1, -3) */
+.plus, .minus {
+    position: absolute;
+    font-weight: bold;
+    font-size: 1.3rem;
+    z-index: 4;
+    pointer-events: none;
+    animation: fadeUp 0.8s ease-out forwards;
 }
 
-.hidden{
-    display:none;
+.plus { color: #2ecc71; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+.minus { color: #e74c3c; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+
+@keyframes fadeUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-45px);
+    }
 }
 
-.screen h2{
-    color:var(--laranja);
-    font-size:40px;
-    margin-bottom:25px;
+/* Flash Vermelho ao Errar o Clique */
+.flash {
+    animation: redFlash 0.3s ease;
 }
 
-.screen h3{
-    color:var(--azul);
-    font-size:28px;
-    margin:20px 0;
+@keyframes redFlash {
+    50% { background-color: rgba(231, 76, 60, 0.25); }
 }
 
-.screen p{
-    font-size:20px;
-    color:#444;
-    line-height:1.5;
-    margin-bottom:30px;
-}button{
-    background:var(--laranja);
-    color:white;
-    border:none;
-    border-radius:12px;
-    padding:16px 35px;
-    font-size:22px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:.25s;
-    box-shadow:0 8px 18px rgba(0,0,0,.15);
+/* ==========================================
+   TELAS DO MENU (INICIAL E FINAL)
+   ========================================== */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /* Garante que fique POR CIMA de tudo */
+    text-align: center;
+    padding: 20px;
 }
 
-button:hover{
-    transform:scale(1.05);
-    background:#ff8d20;
+.screen h2 {
+    color: #4a5c3e;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
 }
 
-button:active{
-    transform:scale(.96);
+.screen h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
 }
 
-#startButton,
-#restartButton{
-    margin-top:20px;
+.screen p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    max-width: 280px;
 }
 
-.plus{
-    position:absolute;
-    color:var(--verde);
-    font-weight:bold;
-    font-size:28px;
-    animation:popup .8s forwards;
-    pointer-events:none;
-    z-index:20;
+/* Botões */
+button {
+    background-color: #ff9f43;
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+    transition: transform 0.1s, background-color 0.2s;
+    outline: none;
 }
 
-.minus{
-    position:absolute;
-    color:var(--vermelho);
-    font-weight:bold;
-    font-size:28px;
-    animation:popup .8s forwards;
-    pointer-events:none;
-    z-index:20;
+button:hover {
+    background-color: #ee5253;
 }
 
-@keyframes popup{
-
-    0%{
-        opacity:1;
-        transform:translateY(0);
-    }
-
-    100%{
-        opacity:0;
-        transform:translateY(-70px);
-    }
-
+button:active {
+    transform: scale(0.95);
 }
 
-.flash{
-    animation:flash .3s;
-}
-
-@keyframes flash{
-
-    0%{
-        background:#fff;
-    }
-
-    50%{
-        background:#ffe8cc;
-    }
-
-    100%{
-        background:#fff;
-    }
-
-}
-
-#message{
-    font-size:24px;
-    font-weight:bold;
-    color:var(--azulEscuro);
-    margin-top:15px;
-}
-
-@media(max-width:500px){
-
-    body{
-        background:white;
-    }
-
-    #game{
-        width:100%;
-        height:100vh;
-        border-radius:0;
-        box-shadow:none;
-    }
-
-    header h1{
-        font-size:24px;
-    }
-
-    .box{
-        font-size:14px;
-        padding:8px;
-    }
-
-    #dog{
-        font-size:70px;
-    }
-
-    .item{
-        font-size:36px;
-    }
-
-    .screen h2{
-        font-size:34px;
-    }
-
-    .screen p{
-        font-size:18px;
-    }
-
-    button{
-        width:90%;
-        font-size:20px;
-    }
-
+/* ==========================================
+   CLASSE QUE FAZ O JOGO FUNCIONAR!
+   ========================================== */
+/* O JS adiciona essa classe para ocultar as telas de Menu e Game Over */
+.hidden {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
